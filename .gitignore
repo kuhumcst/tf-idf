@@ -1,0 +1,6 @@
+.idea
+*.iml
+.nrepl-port
+resources/parliament/raw
+resources/parliament/lemmatized
+resources/flexrules
