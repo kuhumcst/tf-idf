@@ -128,27 +128,17 @@
          idf-result (idf tf-results)]
      (map (partial apply-idf idf-result) tf-results))))
 
-(defn pick-terms
-  "Pick terms in `tf-idf-results` according to a TF-IDF `score-picker`.
+(defn order-terms
+  "Order terms in `tf-idf-results` according to a TF-IDF `score-picker`.
 
   The `score-picker` works as a reducing function for the scores of each term.
   A different `comparator` may be supplied to rank the results in another way."
-  ([tf-idf-results score-picker comparator]
+  ([score-picker comparator tf-idf-results]
    (->> (apply merge-with score-picker tf-idf-results)
         (sort-by second comparator)
         (map first)))
-  ([tf-idf-results score-picker]
-   (pick-terms tf-idf-results score-picker >)))
-
-(defn top-sum-terms
-  "Top terms in `tf-idf-results` according to the sum TF-IDF score."
-  [tf-idf-results]
-  (pick-terms tf-idf-results +))
-
-(defn top-max-terms
-  "Top terms in `tf-idf-results` according to the max TF-IDF score."
-  [tf-idf-results]
-  (pick-terms tf-idf-results max))
+  ([score-picker tf-idf-results]
+   (order-terms score-picker > tf-idf-results)))
 
 (defn top-n-terms
   "Top `n` scoring terms for each of the `tf-idf-results`."
@@ -189,11 +179,11 @@
   ;; Tokenization
   (tokenize "Thomas' wife -- a true believer -- didn't think so.")
   (tokenize "Jeg har ønsket mig sådan en to-hovedet drage længe.")
-  (into [] tokenization-xf documents)
+  (into [] *tokenizer-xf* documents)
 
   ;; Find top terms
-  (take 6 (top-max-terms (tf-idf documents)))
-  (take 6 (top-sum-terms (tf-idf documents)))
+  (take 6 (order-terms max (tf-idf documents)))
+  (take 6 (order-terms + (tf-idf documents)))
   (top-n-terms 2 (tf-idf documents))
 
   ;; Rebinding the tokenizer

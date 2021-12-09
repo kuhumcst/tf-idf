@@ -1,15 +1,42 @@
 TF-IDF
 ======
-This is a small and reasonably performant implementation of TF-IDF written in Clojure.
+This is a small and reasonably performant implementation of [TF-IDF](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) written in Clojure.
 
 Usage
 -----
-There is only a single namespace, `dk.cst.tf-idf`. This namespace contains the core TF-IDF functions as well as a few extra utility functions, e.g. functions for picking terms from the TF-IDF results.
+There is only a single namespace, `dk.cst.tf-idf`. This namespace contains the core TF-IDF functions:
 
-The core TF-IDF functions take a sequence of `documents` (usually strings) and return regular Clojure collections. In order to avoid recalculating too much, results of any intermediate calculations can usually also be fed into the next step of the algorithm.
+```clojure
+(tf documents)      ; => seq of normalized term frequency maps
+(idf documents)     ; => inverse term frequency map
+(tf-idf documents)  ; => seq of term->tf-idf maps
+(vocab documents)   ; => set containing the vocabulary
+```
+
+These core functions all take a sequence of `documents`— usually just strings, although this depends on what `*tokenizer-xf*` [is bound to](#alternative-tokenizers) — and return regular Clojure collections. In order to avoid recalculating too many things, results of any intermediate calculations can usually also be fed into the next step of the algorithm.
+
+The `dk.cst.tf-idf` namespace also contains a few extra utility functions, e.g. functions for picking terms from TF-IDF results:
+
+```clojure
+;; Top 3 terms for every document (deduplicated).
+(top-n-terms 3 (td-idf documents))
+
+;; Top 50 terms based on the highest recorded TF-IDF score.
+(take 50 (order-terms max (td-idf documents)))
+
+;; Top 50 terms based on TF-IDF score sums.
+(take 50 (order-terms + (td-idf documents)))
+```
 
 ### Alternative tokenizers
-The `*tokenizer-xf*` dynamic var contains a reference to the default transducer used to tokenize input documents. This dynamic var can be rebound to allow for alternative tokenizer implementations. The simplest way to create a new tokenizer transducer is to use the included `->tokenizer-xf` function.
+The `*tokenizer-xf*` dynamic var contains a reference to the default transducer used to tokenize input documents.
+
+In order to perform other kinds of text normalization, this dynamic var can be rebound to allow for alternative  implementations. The simplest way to create a new tokenizer transducer is to use the included `->tokenizer-xf` function:
+
+```clojure
+(binding [*tokenizer-xf* (->tokenizer-xf :tokenize #(str/split % #"\s"))]
+    (tf-idf documents))
+```
 
 Explanation of terms
 --------------------
