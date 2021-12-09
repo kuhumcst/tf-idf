@@ -76,6 +76,13 @@
     (mapcat keys documents)
     (into [] (->document-terms-xf *tokenizer-xf*) documents)))
 
+(defn df
+  "Per-document frequencies of each term in `documents` (not normalized).
+
+  Input can be either a coll of strings or the output of 'tf'."
+  [documents]
+  (frequencies (list-terms documents)))
+
 (defn vocab
   "The vocabulary of the `documents`. If a `limit` is provided, then only return
   the vocabulary for terms with a per-document frequency higher than this limit.
@@ -93,18 +100,7 @@
          xf   (comp (remove <=n?) (map first))]
      (if (map? documents)                                   ; df result
        (into #{} xf documents)
-       (into #{} xf (frequencies (list-terms documents)))))))
-
-(defn df
-  "Per-document frequencies of each term in `documents` (not normalized).
-
-  Input can be either a coll of strings or the output of 'tf'."
-  [documents]
-  (persistent!
-    (reduce (fn [df-result term]
-              (assoc! df-result term (inc (get df-result term 0))))
-            (transient {})
-            (list-terms documents))))
+       (into #{} xf (df documents))))))
 
 (defn invert
   "The inversion of `df-result` (normalized)."
