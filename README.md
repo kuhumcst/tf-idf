@@ -18,7 +18,7 @@ These core functions all take a sequence of `documents`— usually just strings,
 The `dk.cst.tf-idf` namespace also contains a few extra utility functions, e.g. functions for picking terms from TF-IDF results:
 
 ```clojure
-;; Top 3 terms for every document (deduplicated).
+;; Top 3 terms for every document.
 (top-n-terms 3 (td-idf documents))
 
 ;; Top 50 terms based on the highest recorded TF-IDF score.

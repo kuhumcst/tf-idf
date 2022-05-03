@@ -3,7 +3,7 @@
   (:require [clojure.string :as str]
             [clojure.java.math :as math]))
 
-;; Should do a decent job with most text using English-like punctuation.
+;; Should do a decent job with most Latin scripts.
 (def space+punctuation
   #"(\d|\s\p{Punct}+\s|\p{Punct}+\s|\s\p{Punct}+|\p{Punct}+$|\s)+")
 
@@ -143,12 +143,11 @@
 (defn top-n-terms
   "Top `n` scoring terms for each of the `tf-idf-results`."
   [n tf-idf-results]
-  (->> tf-idf-results
-       (mapcat (comp
-                 (partial map first)
-                 (partial take n)
-                 (partial sort-by second >)))
-       (dedupe)))
+  (map (comp
+         (partial map first)
+         (partial take n)
+         (partial sort-by second >))
+       tf-idf-results))
 
 (comment
   (def documents
