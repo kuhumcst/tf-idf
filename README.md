@@ -1,5 +1,7 @@
 TF-IDF
 ======
+[![tf-idf](https://img.shields.io/clojars/v/dk.cst/tf-idf.svg)](https://clojars.org/dk.cst/tf-idf)
+
 This is a small and reasonably performant implementation of [TF-IDF](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) written in Clojure.
 
 Usage

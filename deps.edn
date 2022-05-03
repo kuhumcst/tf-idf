@@ -1,2 +1,6 @@
-{:paths ["src"]
- :deps  {org.clojure/clojure {:mvn/version "1.11.0-alpha3"}}}
+{:paths   ["src"]
+ :deps    {org.clojure/clojure {:mvn/version "1.11.1"}}
+ :aliases {:build {:extra-paths ["dev/src"]
+                   :extra-deps  {io.github.seancorfield/build-clj {:git/tag "v0.8.0"
+                                                                   :git/sha "9bd8b8a"}}
+                   :ns-default  build}}}
