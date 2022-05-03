@@ -21,13 +21,13 @@ The `dk.cst.tf-idf` namespace also contains a few extra utility functions, e.g. 
 
 ```clojure
 ;; Top 3 terms for every document.
-(top-n-terms 3 (td-idf documents))
+(top-n-terms 3 (tf-idf documents))
 
 ;; Top 50 terms based on the highest recorded TF-IDF score.
-(take 50 (order-terms max (td-idf documents)))
+(take 50 (order-terms max (tf-idf documents)))
 
 ;; Top 50 terms based on TF-IDF score sums.
-(take 50 (order-terms + (td-idf documents)))
+(take 50 (order-terms + (tf-idf documents)))
 ```
 
 ### Alternative tokenizers
