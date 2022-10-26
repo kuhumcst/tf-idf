@@ -1,7 +1,7 @@
 (ns dk.cst.tf-idf
   "A reasonably performant TF-IDF implementation."
   (:require [clojure.string :as str]
-            [clojure.java.math :as math]))
+            [clojure.math :as math]))
 
 ;; Should do a decent job with most Latin scripts.
 (def space+punctuation
